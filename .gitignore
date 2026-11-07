@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# 本机技能元数据（WorkBuddy 安装时生成）
+_user_meta.json
+
+# 项目产物：只提交规范与脚本，不提交任何素材 / 成片 / 工程
+输出/
+草稿/
+素材/
+*.mp4
+*.mov
+*.mkv
+*.mp3
+*.wav
+*.srt
+*.ass
+*.jpg
+*.jpeg
+*.png
+*.webp
+draft_content*.json
+draft_meta_info*.json
+root_meta_info.json
+
+# 实测与临时产物
+selftest/
+_脱敏报告.json
+*.tmp
+*.bak
+
+# 系统
+.DS_Store
+Thumbs.db
+desktop.ini

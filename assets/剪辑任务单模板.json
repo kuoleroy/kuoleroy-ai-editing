@@ -1,0 +1,137 @@
+{
+  "schema_version": "1.0",
+  "project": "",
+  "doctor": "",
+  "topic": "",
+  "date": "",
+  "status": "draft",
+  "canvas": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30
+  },
+  "inputs": {
+    "封面模板": "封面模板/",
+    "工程文件": "工程文件/",
+    "数字人原片": "数字人原片/",
+    "素材": "素材/",
+    "文案": "文案/",
+    "note": "五文件夹缺项先报告，不脑补"
+  },
+  "style_profile": {
+    "source": "",
+    "card": "",
+    "note": "不同医生分别建卡；与基线冲突时以风格卡为准并在验收报告注明偏差",
+    "overrides": {}
+  },
+  "tracks": ["视频分镜", "原声", "BGM", "顶标题", "字幕", "免责声明"],
+  "params": {
+    "title_y": 0.84,
+    "subtitle_y": -0.20,
+    "disclaimer_y": -0.91,
+    "title_font_size": 12,
+    "subtitle_font_size": 12,
+    "subtitle_px_ass": 110,
+    "disclaimer_px_ass": 52,
+    "digital_human_scale": 1.18,
+    "avg_shot_seconds": "1.7-2.4",
+    "beauty": {"smooth": 0.70, "skin": 0.35, "apply_to": "仅医生口播片段"},
+    "title_always_on": true,
+    "title_no_drug_name": true
+  },
+  "subtitles": {
+    "source": "文案/逐字稿.txt",
+    "timeline": "asr_word_level",
+    "max_chars": 11,
+    "single_line": true,
+    "no_punctuation": true,
+    "auto_wrap": false,
+    "tail_pad_seconds": 0.6,
+    "protect_words": [],
+    "note": "禁止按字数估时；无词级时间戳或 ASR 未覆盖全片即质检 FAIL；--duration 取 delivery.final_duration"
+  },
+  "assets": {
+    "min_inserts": 3,
+    "recommended_inserts": 5,
+    "insert_points": [],
+    "insert_points_schema": {
+      "type": "video | image（视频片段用 video）",
+      "source": "素材路径，相对项目目录优先；绝对路径也可",
+      "source_in": "源片段入点（秒）；仅 video 必填",
+      "source_out": "源片段出点（秒）；仅 video 必填，且 source_out - source_in >= duration + 0.2",
+      "target_in": "成片时间轴插入点（秒），必须落在字幕句边界 ±0.15s；开头 3s 内须有插入",
+      "duration": "1.7-2.4 秒，对齐 params.avg_shot_seconds",
+      "volume": "必须为 0（静音 ≠ 删音轨），方便人工恢复",
+      "fit": "fullscreen（默认，整屏替换）| pip（须附 safe_area=top12_bottom22 并人工确认不压医生脸）",
+      "hard_subtitle_clean": "是否清除平台硬字幕",
+      "license_status": "approved | unknown | rejected；非 approved 一律禁用，裁水印不等于取得授权",
+      "semantic_anchor": "对应字幕句，供人工核对语义匹配",
+      "source_fps": "ffprobe 实测帧率；与 canvas.fps 不一致时登记 acceptance.deferred_items",
+      "source_resolution": "ffprobe 实测分辨率",
+      "note": "备注"
+    },
+    "insert_points_workflow": "select_inserts.py --scan 生成候选（不自动定稿）→ 人工确认语义/源入出点/授权 → --apply 写入本数组并质检 → --verify 复核；退出码 2 必须停止批量与交付",
+    "library": "<ASSETS>",
+    "public_library": "<PUBLIC_LIBRARY>",
+    "public_readonly": true,
+    "categorize_by": "病症",
+    "clean_hard_subtitles": true
+  },
+  "audio": {
+    "voice_lufs": -16,
+    "voice_peak_db": -1.3,
+    "bgm": {
+      "candidates": [],
+      "confirmed": "",
+      "volume_percent": 12,
+      "fade_in_seconds": 1.0,
+      "fade_out_seconds": 1.5,
+      "note": "先给 4-5 首候选供用户试听，确认后才渲染"
+    },
+    "sfx": {"count_range": "12-26", "volume_percent": 100},
+    "speed_override": 1.0
+  },
+  "cover": {
+    "width": 1080,
+    "height": 1920,
+    "title": "",
+    "subtitle_lines": [],
+    "no_drug_name": true,
+    "text_in_gray_box": true,
+    "text_vertically_centered": true,
+    "prompt_template": "assets/封面生成提示词.md",
+    "source_priority": ["封面模板/ 既有封面复刻换文案", "成片抽帧 + 抠图白边", "提示词生成底图（无模板时兜底）"],
+    "portrait_source": "",
+    "portrait_license": "",
+    "style_variant": "",
+    "accent_color": "#FFD400",
+    "ai_text_rendering": false,
+    "text_overlay_tool": "",
+    "compliance_reviewed": false,
+    "note": "人像必须来自本人授权真人素材，禁止文生图凭空生成医生脸；中文文案后期叠加且逐字取自本字段，禁止模型直出；医疗合规人工复核后置 true"
+  },
+  "delivery": {
+    "draft_name": "",
+    "final_duration": 0.0,
+    "final_duration_note": "片尾清理后的最终成片时长（秒）；build_subtitles.py 的 --duration 取此值，不要用原始素材容器时长",
+    "main_video": "",
+    "main_video_note": "口播原片路径。工程以 final_duration 为最终时间轴；做过片尾清理或节奏压缩后，字幕与插入点必须整体重排，不能沿用原始 ASR 时间",
+    "draft_dir": "",
+    "draft_dir_note": "换机必填：本机剪映草稿根目录（示例 <JIANYING_DRAFTS>/JianyingPro Drafts），禁止硬编码盘符",
+    "mp4": "",
+    "cover": "",
+    "plan": "输出/剪辑任务单.json",
+    "subtitles": [],
+    "notes": "",
+    "qc_report": "",
+    "one_video_one_project": true,
+    "keep_all_versions": true
+  },
+  "history_versions": [],
+  "acceptance": {
+    "sample_approved": false,
+    "batch_started": false,
+    "deferred_items": [],
+    "note": "先剪 1 条样板给用户验收，通过后才批量；样板阶段未完成的规范项（如插入素材、BGM、美颜、风格卡）必须登记在 deferred_items，批量前清零"
+  }
+}
